@@ -1,5 +1,5 @@
 html {
-  background: #F1ECE3; /* matches --bg, fills iOS safe-area bands */
+  background: #F1ECE3; /* fills iOS safe-area bands */
 }
 
 :root {
@@ -16,25 +16,34 @@ html {
 }
 
 * { box-sizing: border-box; }
-html, body, #root {
-  margin: 0; padding: 0;
+
+html, body {
+  margin: 0;
+  padding: 0;
   height: 100%;
-  height: 100dvh;
 }
+
 body {
   background: radial-gradient(120% 80% at 50% 0%, #ECE6DB 0%, #E4DCCF 60%, #DCD3C3 100%);
   font-family: var(--ui);
   -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
   overflow: hidden;
 }
+
+/* Mobile: position:fixed fills the viewport precisely, no gaps */
 #root {
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
+
 ::-webkit-scrollbar { width: 0; height: 0; }
 button { font-family: inherit; }
 
-/* Limit app width on desktop */
+/* Desktop: centered phone-card layout */
 @media (min-width: 480px) {
   body {
     display: flex;
@@ -42,10 +51,11 @@ button { font-family: inherit; }
     justify-content: center;
   }
   #root {
+    position: relative;
     width: 400px;
     height: 100dvh;
     max-height: 900px;
     box-shadow: 0 0 60px rgba(0,0,0,0.3);
-    border-radius: 0;
+    inset: auto;
   }
 }

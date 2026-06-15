@@ -175,7 +175,7 @@ export default function Dashboard({ tx, cats, jornal, onOpenCategory, onScrollCh
           <span style={{ fontFamily: 'var(--ui)', fontSize: 12.5, color: 'var(--ink-soft)' }}>{gastoCats.length} activas</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 8 }}>
-          <Donut slices={slices} size={158} stroke={22}>
+          <Donut slices={slices} size={140} stroke={20}>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 11.5, color: 'var(--ink-soft)' }}>Gastado</div>
             <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(18px, 6vw, 25px)', fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}>{fmtNum(gastado, 0)}€</div>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 11, color: 'var(--accent)', fontWeight: 600 }}>{pct(gastado)}% jornal</div>
@@ -185,7 +185,7 @@ export default function Dashboard({ tx, cats, jornal, onOpenCategory, onScrollCh
               <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <span style={{ width: 9, height: 9, borderRadius: 3, background: c.color, flexShrink: 0 }} />
                 <span style={{ fontFamily: 'var(--ui)', fontSize: 13, color: 'var(--ink)', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.name}</span>
-                <span style={{ fontFamily: 'var(--display)', fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', fontVariantNumeric: 'tabular-nums' }}>{gastado > 0 ? Math.round(spentByCat[c.id] / gastado * 100) : 0}%</span>
+                <span style={{ fontFamily: 'var(--display)', fontSize: 13, fontWeight: 600, color: 'var(--ink-soft)', fontVariantNumeric: 'tabular-nums', flexShrink: 0 }}>{gastado > 0 ? Math.round(spentByCat[c.id] / gastado * 100) : 0}%</span>
               </div>
             )}
           </div>

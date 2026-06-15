@@ -61,17 +61,25 @@ export default function App() {
   const [showSyncBanner, setShowSyncBanner] = useState(false)
   const syncTimerRef = useRef(null)
   const bannerTimerRef = useRef(null)
+  const isFirstConnectRef = useRef(true)
 
   const handleSyncStatus = useCallback((status) => {
     setSyncStatus(status)
     setDriveConnected(status === 'connected' || status === 'syncing')
-    if (status === 'syncing' || status === 'error') {
+    if (status === 'syncing') {
+      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
+      setShowSyncBanner(true)
+    } else if (status === 'error') {
       if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
       setShowSyncBanner(true)
     } else if (status === 'connected') {
-      setShowSyncBanner(true)
-      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
-      bannerTimerRef.current = setTimeout(() => setShowSyncBanner(false), 3000)
+      if (isFirstConnectRef.current) {
+        isFirstConnectRef.current = false
+      } else {
+        setShowSyncBanner(true)
+        if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
+        bannerTimerRef.current = setTimeout(() => setShowSyncBanner(false), 2000)
+      }
     } else {
       setShowSyncBanner(false)
     }
@@ -154,26 +162,27 @@ export default function App() {
   return (
     <div style={{ height: '100%', position: 'relative', background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 
-      {/* Status bar safe area */}
-      <div style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px))', flexShrink: 0 }}>
-        {/* Drive sync status bar — auto-dismisses after 3s on success */}
-        {showSyncBanner && (
-          <div style={{
-            background: syncStatus === 'error' ? '#D85C3220' : '#3E6B5718',
-            padding: '4px 16px',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            fontSize: 11.5, fontFamily: 'var(--ui)', color: syncStatus === 'error' ? 'var(--accent)' : '#3E6B57'
-          }}>
-            <span>
-              {syncStatus === 'syncing' ? 'Sincronizando...' : syncStatus === 'error' ? 'Error de sincronización' : '✓ Sincronizado con Drive'}
-            </span>
-            <button onClick={handleDisconnectDrive} style={{
-              all: 'unset', cursor: 'pointer', fontSize: 11, fontWeight: 600, opacity: 0.7,
-              color: syncStatus === 'error' ? 'var(--accent)' : '#3E6B57'
-            }}>Desconectar</button>
-          </div>
-        )}
-      </div>
+      {/* Status bar safe area — padding only, no layout impact */}
+      <div style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px))', flexShrink: 0 }} />
+
+      {/* Floating sync pill — overlays content, doesn't push layout */}
+      {showSyncBanner && (
+        <div style={{
+          position: 'absolute',
+          top: 'calc(env(safe-area-inset-top, 0px) + 10px)',
+          left: '50%', transform: 'translateX(-50%)',
+          zIndex: 35, pointerEvents: 'none',
+          background: syncStatus === 'error' ? 'var(--accent)' : 'rgba(29,26,21,0.85)',
+          color: '#F4EFE6',
+          padding: '5px 14px', borderRadius: 99,
+          fontFamily: 'var(--ui)', fontSize: 12, fontWeight: 600,
+          boxShadow: '0 4px 14px -3px rgba(26,23,18,.35)',
+          whiteSpace: 'nowrap', letterSpacing: '.01em',
+          backdropFilter: 'blur(8px)',
+        }}>
+          {syncStatus === 'syncing' ? '↑ Sincronizando…' : syncStatus === 'error' ? '⚠ Error de sincronización' : '✓ Sincronizado'}
+        </div>
+      )}
 
       {/* Contenido principal */}
       <div style={{ flex: 1, overflow: 'hidden', paddingTop: '8px' }}>
@@ -233,8 +242,8 @@ export default function App() {
         cats={cats}
         jornal={jornal}
         onSetJornal={setJornal}
-        onEditTx={(t) => { setSettings(false); setTimeout(() => openEdit(t), 260) }}
-        onManageCats={() => { setSettings(false); setTimeout(() => setManageCats(true), 260) }}
+        onEditTx={(t) => openEdit(t)}
+        onManageCats={() => setManageCats(true)}
         onReset={reset}
         onExport={handleExport}
         onImport={handleImport}
