@@ -99,7 +99,7 @@ export function AddSheet({ open, onClose, onSave, onDelete, editTx, presetCat, c
           {/* importe */}
           <div style={{ textAlign: 'center', padding: '16px 0 10px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: 6 }}>
-              <span style={{ fontFamily: 'var(--display)', fontSize: 54, fontWeight: 600, color: numAmount > 0 ? 'var(--ink)' : '#00000028', letterSpacing: '-.03em', fontVariantNumeric: 'tabular-nums' }}>{amount}</span>
+              <span style={{ fontFamily: 'var(--display)', fontSize: 'clamp(36px, 13vw, 54px)', fontWeight: 600, color: numAmount > 0 ? 'var(--ink)' : '#00000028', letterSpacing: '-.03em', fontVariantNumeric: 'tabular-nums' }}>{amount}</span>
               <span style={{ fontFamily: 'var(--display)', fontSize: 30, fontWeight: 500, color: '#00000035' }}>€</span>
             </div>
             <div style={{ marginTop: 4, fontFamily: 'var(--ui)', fontSize: 12.5, color: 'var(--ink-soft)' }}>
@@ -184,7 +184,8 @@ export function AddSheet({ open, onClose, onSave, onDelete, editTx, presetCat, c
 }
 
 // Detalle de categoría — lista de transacciones, editar/eliminar
-export function CategoryDetail({ catId, tx, cats, onBack, onEdit, onAddInCat }) {
+export function CategoryDetail({ catId, tx, cats, onBack, onEdit, onDelete, onAddInCat }) {
+  const [confirmDelId, setConfirmDelId] = useState(null)
   const CAT = Object.fromEntries((cats || []).map(c => [c.id, c]))
   const cat = CAT[catId]
   if (!cat) return null
@@ -215,7 +216,7 @@ export function CategoryDetail({ catId, tx, cats, onBack, onEdit, onAddInCat }) 
         <div style={{ fontFamily: 'var(--display)', fontSize: 22, fontWeight: 600, color: 'var(--ink)', marginTop: 12 }}>{cat.name}</div>
         <div style={{ fontFamily: 'var(--ui)', fontSize: 13, color: 'var(--ink-soft)', marginTop: 2 }}>{cat.sub}</div>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 14 }}>
-          <span style={{ fontFamily: 'var(--display)', fontSize: 40, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{fmtNum(spent, 2)}</span>
+          <span style={{ fontFamily: 'var(--display)', fontSize: 'clamp(28px, 9.5vw, 40px)', fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{fmtNum(spent, 2)}</span>
           <span style={{ fontFamily: 'var(--display)', fontSize: 22, color: 'var(--ink-soft)' }}>€</span>
         </div>
         {cat.budget > 0 && (
@@ -232,21 +233,39 @@ export function CategoryDetail({ catId, tx, cats, onBack, onEdit, onAddInCat }) 
       <div style={{ fontFamily: 'var(--display)', fontSize: 15, fontWeight: 600, color: 'var(--ink)', padding: '20px 24px 10px' }}>Movimientos · {list.length}</div>
       <div style={{ margin: '0 18px', background: 'var(--paper)', borderRadius: 22, overflow: 'hidden', boxShadow: '0 1px 2px rgba(40,28,16,.04)' }}>
         {list.length === 0 && <div style={{ padding: '28px', textAlign: 'center', fontFamily: 'var(--ui)', fontSize: 14, color: 'var(--ink-soft)' }}>Sin movimientos todavía</div>}
-        {list.map((t, i) => (
-          <button key={t.id} onClick={() => onEdit(t)} style={{
-            all: 'unset', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px',
-            borderBottom: i < list.length - 1 ? '0.5px solid rgba(60,50,40,.10)' : 'none', width: '100%', boxSizing: 'border-box'
-          }}>
-            <div style={{ width: 38, height: 38, borderRadius: 11, background: cat.color + '14', color: cat.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={cat.icon} /></svg>
+        {list.map((t, i) => {
+          const border = i < list.length - 1 ? '0.5px solid rgba(60,50,40,.10)' : 'none'
+          if (confirmDelId === t.id) {
+            return (
+              <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', borderBottom: border, background: '#D85C3206' }}>
+                <span style={{ flex: 1, fontFamily: 'var(--ui)', fontSize: 13.5, fontWeight: 500, color: 'var(--ink)' }}>¿Eliminar "{t.desc}"?</span>
+                <button onClick={() => setConfirmDelId(null)} style={{ all: 'unset', cursor: 'pointer', padding: '7px 13px', borderRadius: 10, background: '#00000010', fontFamily: 'var(--ui)', fontSize: 13, fontWeight: 600, color: 'var(--ink)' }}>No</button>
+                <button onClick={() => { onDelete(t.id); setConfirmDelId(null) }} style={{ all: 'unset', cursor: 'pointer', padding: '7px 13px', borderRadius: 10, background: 'var(--accent)', fontFamily: 'var(--ui)', fontSize: 13, fontWeight: 700, color: '#fff' }}>Sí</button>
+              </div>
+            )
+          }
+          return (
+            <div key={t.id} style={{ display: 'flex', alignItems: 'center', borderBottom: border }}>
+              <button onClick={() => onEdit(t)} style={{
+                all: 'unset', cursor: 'pointer', display: 'flex', flex: 1, alignItems: 'center', gap: 12, padding: '14px 8px 14px 16px', minWidth: 0
+              }}>
+                <div style={{ width: 38, height: 38, borderRadius: 11, background: cat.color + '14', color: cat.color, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d={cat.icon} /></svg>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontFamily: 'var(--ui)', fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{t.desc}</div>
+                  <div style={{ fontFamily: 'var(--ui)', fontSize: 12, color: 'var(--ink-soft)', marginTop: 1 }}>{t.day} jun 2026</div>
+                </div>
+                <span style={{ fontFamily: 'var(--display)', fontSize: 16, fontWeight: 600, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', flexShrink: 0 }}>−{fmt(t.amount)}</span>
+              </button>
+              <button onClick={() => setConfirmDelId(t.id)} style={{
+                all: 'unset', cursor: 'pointer', padding: '14px 16px 14px 6px', display: 'flex', alignItems: 'center', color: 'var(--ink-soft)'
+              }}>
+                <Glyph d={GLYPHS.trash} size={16} stroke={1.9} />
+              </button>
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontFamily: 'var(--ui)', fontSize: 15, fontWeight: 600, color: 'var(--ink)' }}>{t.desc}</div>
-              <div style={{ fontFamily: 'var(--ui)', fontSize: 12, color: 'var(--ink-soft)', marginTop: 1 }}>{t.day} jun 2026</div>
-            </div>
-            <span style={{ fontFamily: 'var(--display)', fontSize: 16, fontWeight: 600, color: 'var(--ink)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', flexShrink: 0 }}>−{fmt(t.amount)}</span>
-          </button>
-        ))}
+          )
+        })}
       </div>
     </div>
   )

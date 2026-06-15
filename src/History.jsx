@@ -38,7 +38,7 @@ export default function History({ tx, jornal }) {
           <div>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 13, color: 'rgba(244,239,230,.6)' }}>Ahorro acumulado</div>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 6 }}>
-              <span style={{ fontFamily: 'var(--display)', fontSize: 38, fontWeight: 600, letterSpacing: '-.025em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(totalAhorro, 0)}</span>
+              <span style={{ fontFamily: 'var(--display)', fontSize: 'clamp(26px, 9vw, 38px)', fontWeight: 600, letterSpacing: '-.025em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(totalAhorro, 0)}</span>
               <span style={{ fontFamily: 'var(--display)', fontSize: 20, color: 'rgba(244,239,230,.7)' }}>€</span>
             </div>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 12, color: 'rgba(244,239,230,.5)', marginTop: 7, whiteSpace: 'nowrap' }}>en 6 meses · {avgRate}% de media</div>
@@ -72,7 +72,7 @@ export default function History({ tx, jornal }) {
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontFamily: 'var(--ui)', fontSize: 12.5, color: 'var(--ink-soft)' }}>{metric === 'ahorro' ? 'Ahorrado' : 'Gastado'} en {selData.m}</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-            <span style={{ fontFamily: 'var(--display)', fontSize: 30, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{fmt(metric === 'ahorro' ? selData.ahorro : selData.gastos)}</span>
+            <span style={{ fontFamily: 'var(--display)', fontSize: 'clamp(22px, 7vw, 30px)', fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{fmt(metric === 'ahorro' ? selData.ahorro : selData.gastos)}</span>
             {selData.current && <span style={{ fontFamily: 'var(--ui)', fontSize: 11, fontWeight: 600, color: accent, background: accent + '18', padding: '3px 8px', borderRadius: 99 }}>actual</span>}
           </div>
         </div>

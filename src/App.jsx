@@ -58,11 +58,23 @@ export default function App() {
   // Drive sync state
   const [syncStatus, setSyncStatus] = useState('disconnected')
   const [driveConnected, setDriveConnected] = useState(false)
+  const [showSyncBanner, setShowSyncBanner] = useState(false)
   const syncTimerRef = useRef(null)
+  const bannerTimerRef = useRef(null)
 
   const handleSyncStatus = useCallback((status) => {
     setSyncStatus(status)
     setDriveConnected(status === 'connected' || status === 'syncing')
+    if (status === 'syncing' || status === 'error') {
+      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
+      setShowSyncBanner(true)
+    } else if (status === 'connected') {
+      setShowSyncBanner(true)
+      if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current)
+      bannerTimerRef.current = setTimeout(() => setShowSyncBanner(false), 3000)
+    } else {
+      setShowSyncBanner(false)
+    }
   }, [])
 
   // Initialize Drive sync on mount
@@ -144,8 +156,8 @@ export default function App() {
 
       {/* Status bar safe area */}
       <div style={{ paddingTop: 'calc(env(safe-area-inset-top, 0px))', flexShrink: 0 }}>
-        {/* Drive sync status bar */}
-        {driveConnected && (
+        {/* Drive sync status bar — auto-dismisses after 3s on success */}
+        {showSyncBanner && (
           <div style={{
             background: syncStatus === 'error' ? '#D85C3220' : '#3E6B5718',
             padding: '4px 16px',
@@ -166,7 +178,7 @@ export default function App() {
       {/* Contenido principal */}
       <div style={{ flex: 1, overflow: 'hidden', paddingTop: '8px' }}>
         {detailCat
-          ? <CategoryDetail catId={detailCat} tx={tx} cats={cats} onBack={() => setDetailCat(null)} onEdit={openEdit} onAddInCat={openAddInCat} />
+          ? <CategoryDetail catId={detailCat} tx={tx} cats={cats} onBack={() => setDetailCat(null)} onEdit={openEdit} onDelete={delTx} onAddInCat={openAddInCat} />
           : tab === 'home'
             ? <Dashboard tx={tx} cats={cats} jornal={jornal} onOpenCategory={setDetailCat} onOpenSettings={() => setSettings(true)} onOpenAdd={openNew} />
             : <History tx={tx} jornal={jornal} />

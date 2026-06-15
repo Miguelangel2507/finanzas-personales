@@ -1,3 +1,7 @@
+html {
+  background: #F1ECE3; /* matches --bg, fills iOS safe-area bands */
+}
+
 :root {
   --bg: #F1ECE3;
   --paper: #FFFFFF;

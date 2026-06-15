@@ -110,7 +110,7 @@ export default function Dashboard({ tx, cats, jornal, onOpenCategory, onScrollCh
         <div style={{ position: 'relative' }}>
           <div style={{ fontFamily: 'var(--ui)', fontSize: 13.5, fontWeight: 500, color: 'rgba(244,239,230,.62)', letterSpacing: '.01em' }}>Saldo libre este mes</div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 7 }}>
-            <span style={{ fontFamily: 'var(--display)', fontSize: 46, fontWeight: 600, letterSpacing: '-.025em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(libre, 2)}</span>
+            <span style={{ fontFamily: 'var(--display)', fontSize: 'clamp(28px, 11vw, 46px)', fontWeight: 600, letterSpacing: '-.025em', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{fmtNum(libre, 2)}</span>
             <span style={{ fontFamily: 'var(--display)', fontSize: 22, fontWeight: 500, color: 'rgba(244,239,230,.7)' }}>€</span>
           </div>
           <div style={{ fontFamily: 'var(--ui)', fontSize: 12.5, color: 'rgba(244,239,230,.5)', marginTop: 8 }}>
@@ -156,7 +156,7 @@ export default function Dashboard({ tx, cats, jornal, onOpenCategory, onScrollCh
                 </div>
                 <span style={{ fontFamily: 'var(--ui)', fontSize: 11.5, color: 'var(--ink-soft)', fontWeight: 500 }}>{l}</span>
               </div>
-              <div style={{ fontFamily: 'var(--display)', fontSize: 21, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{fmtNum(Math.max(0, v), 0)}€</div>
+              <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(15px, 5vw, 21px)', fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums' }}>{fmtNum(Math.max(0, v), 0)}€</div>
             </div>
           )}
         </div>
@@ -177,7 +177,7 @@ export default function Dashboard({ tx, cats, jornal, onOpenCategory, onScrollCh
         <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginTop: 8 }}>
           <Donut slices={slices} size={158} stroke={22}>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 11.5, color: 'var(--ink-soft)' }}>Gastado</div>
-            <div style={{ fontFamily: 'var(--display)', fontSize: 25, fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}>{fmtNum(gastado, 0)}€</div>
+            <div style={{ fontFamily: 'var(--display)', fontSize: 'clamp(18px, 6vw, 25px)', fontWeight: 600, color: 'var(--ink)', letterSpacing: '-.02em', fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}>{fmtNum(gastado, 0)}€</div>
             <div style={{ fontFamily: 'var(--ui)', fontSize: 11, color: 'var(--accent)', fontWeight: 600 }}>{pct(gastado)}% jornal</div>
           </Donut>
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 11 }}>

@@ -165,18 +165,23 @@ export default function CategoriesManager({ open, onClose, tx, cats, onAdd, onUp
                 <React.Fragment>
                   <div style={{ fontFamily: 'var(--ui)', fontSize: 12.5, fontWeight: 600, color: 'var(--ink-soft)', padding: '18px 4px 8px' }}>Frecuencia</div>
                   <div style={{ display: 'flex', gap: 10 }}>
-                    {[['fijo', 'Gasto fijo', 'Recurrente cada mes', 'var(--accent)'], ['diario', 'Gasto diario', 'Variable del día a día', '#E0913C']].map(([k, l, sub, col]) =>
-                      <button key={k} onClick={() => D('flow', k)} style={{
-                        all: 'unset', cursor: 'pointer', flex: 1, boxSizing: 'border-box', borderRadius: 15, padding: '12px 13px',
-                        background: 'var(--paper)', boxShadow: (draft.flow || 'diario') === k ? `0 0 0 2px ${col}` : '0 1px 2px rgba(40,28,16,.05)', transition: 'box-shadow .15s'
-                      }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                          <span style={{ width: 9, height: 9, borderRadius: 99, background: col, flexShrink: 0 }} />
-                          <span style={{ fontFamily: 'var(--ui)', fontSize: 13.5, fontWeight: 700, color: 'var(--ink)', whiteSpace: 'nowrap' }}>{l}</span>
-                        </div>
-                        <div style={{ fontFamily: 'var(--ui)', fontSize: 11, color: 'var(--ink-soft)', marginTop: 5, lineHeight: 1.3 }}>{sub}</div>
-                      </button>
-                    )}
+                    {[['fijo', 'Gasto fijo', 'Recurrente cada mes', 'var(--accent)', '#D85C32'], ['diario', 'Gasto diario', 'Variable del día a día', '#E0913C', '#E0913C']].map(([k, l, sub, col, hex]) => {
+                      const active = (draft.flow || 'diario') === k
+                      return (
+                        <button key={k} onClick={() => D('flow', k)} style={{
+                          all: 'unset', cursor: 'pointer', flex: 1, boxSizing: 'border-box', borderRadius: 15, padding: '12px 13px',
+                          background: active ? hex + '18' : 'var(--paper)',
+                          boxShadow: active ? `0 0 0 2px ${col}` : '0 1px 2px rgba(40,28,16,.05)',
+                          transition: 'all .15s'
+                        }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+                            <span style={{ width: 9, height: 9, borderRadius: 99, background: col, flexShrink: 0 }} />
+                            <span style={{ fontFamily: 'var(--ui)', fontSize: 13.5, fontWeight: 700, color: active ? col : 'var(--ink)', whiteSpace: 'nowrap' }}>{l}</span>
+                          </div>
+                          <div style={{ fontFamily: 'var(--ui)', fontSize: 11, color: 'var(--ink-soft)', marginTop: 5, lineHeight: 1.3 }}>{sub}</div>
+                        </button>
+                      )
+                    })}
                   </div>
                 </React.Fragment>
               }
