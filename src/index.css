@@ -1,0 +1,47 @@
+:root {
+  --bg: #F1ECE3;
+  --paper: #FFFFFF;
+  --hero: #1D1A15;
+  --ink: #1F1B15;
+  --ink-soft: #897F70;
+  --accent: #D85C32;
+  --display: 'Space Grotesk', system-ui, sans-serif;
+  --ui: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; }
+html, body, #root {
+  margin: 0; padding: 0;
+  height: 100%;
+  height: 100dvh;
+}
+body {
+  background: radial-gradient(120% 80% at 50% 0%, #ECE6DB 0%, #E4DCCF 60%, #DCD3C3 100%);
+  font-family: var(--ui);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+#root {
+  display: flex;
+  flex-direction: column;
+}
+::-webkit-scrollbar { width: 0; height: 0; }
+button { font-family: inherit; }
+
+/* Limit app width on desktop */
+@media (min-width: 480px) {
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #root {
+    width: 400px;
+    height: 100dvh;
+    max-height: 900px;
+    box-shadow: 0 0 60px rgba(0,0,0,0.3);
+    border-radius: 0;
+  }
+}
